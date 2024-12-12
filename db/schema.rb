@@ -20,17 +20,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_12_140819) do
   end
 
   create_table "items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.text "description"
-    t.bigint "category_id", null: false
+    t.bigint "category_id"
     t.string "shelf_number"
-    t.integer "current_quantity"
-    t.integer "optimal_quantity"
-    t.integer "reorder_threshold"
+    t.integer "current_quantity", null: false
+    t.integer "optimal_quantity", null: false
+    t.integer "reorder_threshold", null: false
     t.string "unit"
     t.string "manufacturer"
     t.text "supplier_info"
-    t.decimal "price", precision: 10
+    t.decimal "price", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_items_on_category_id"
