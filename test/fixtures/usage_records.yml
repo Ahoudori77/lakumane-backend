@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item: one
+  user: one
+  usage_date: 2024-12-15 13:18:59
+  quantity: 1
+  reason: MyString
+
+two:
+  item: two
+  user: two
+  usage_date: 2024-12-15 13:18:59
+  quantity: 1
+  reason: MyString
