@@ -1,4 +1,5 @@
 class UsageRecordsController < ApplicationController
+  
   def create
     usage_record = UsageRecord.new(usage_record_params)
     if usage_record.save
