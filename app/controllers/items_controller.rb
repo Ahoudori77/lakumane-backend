@@ -40,12 +40,17 @@ class ItemsController < ApplicationController
     else
       render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Item not found' }, status: :not_found
   end
+  
 
   def destroy
     item = Item.find(params[:id])
     item.destroy
     head :no_content
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Item not found' }, status: :not_found
   end
 
   private
