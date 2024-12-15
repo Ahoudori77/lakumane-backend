@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_15_041859) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_15_113345) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "parent_id"
@@ -36,6 +36,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_15_041859) do
     t.index ["category_id"], name: "index_items_on_category_id"
   end
 
+  create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.integer "quantity", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_orders_on_item_id"
+  end
+
   create_table "usage_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "user_id", null: false
@@ -58,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_15_041859) do
   end
 
   add_foreign_key "items", "categories"
+  add_foreign_key "orders", "items"
   add_foreign_key "usage_records", "items"
   add_foreign_key "usage_records", "users"
 end
