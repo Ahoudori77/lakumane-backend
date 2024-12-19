@@ -7,4 +7,10 @@ Rails.application.routes.draw do
   resources :usage_records, only: [:create]
   resources :inventory, only: [:index, :update]
   resources :orders, only: [:index, :create]
+
+  namespace :api do
+    namespace :v1 do
+      resources :inventory, only: [:index, :update]
+    end
+  end
 end
