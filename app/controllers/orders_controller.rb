@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     orders = Order.includes(:item).all
     render json: orders.as_json(include: { item: { only: [:id, :name] } })

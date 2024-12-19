@@ -2,6 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'UsageRecords API', type: :request do
   let!(:user) { FactoryBot.create(:user) }
+  let!(:auth_headers) do
+    post '/auth/sign_in', params: { email: user.email, password: 'password' }
+    response.headers.slice('access-token', 'client', 'uid')
+  end
   let!(:item) { FactoryBot.create(:item) }
 
   describe 'POST /usage_records' do
@@ -15,7 +19,7 @@ RSpec.describe 'UsageRecords API', type: :request do
             quantity: 5,
             reason: '在庫補充'
           }
-        }
+        }, headers: auth_headers
 
         expect(response).to have_http_status(:created)
         json_response = JSON.parse(response.body)
@@ -33,7 +37,7 @@ RSpec.describe 'UsageRecords API', type: :request do
             quantity: 5,
             reason: '在庫補充'
           }
-        }
+        }, headers: auth_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
@@ -49,7 +53,7 @@ RSpec.describe 'UsageRecords API', type: :request do
             quantity: 5,
             reason: '在庫補充'
           }
-        }
+        }, headers: auth_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
@@ -65,7 +69,7 @@ RSpec.describe 'UsageRecords API', type: :request do
             quantity: 5,
             reason: '在庫補充'
           }
-        }
+        }, headers: auth_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
@@ -81,7 +85,7 @@ RSpec.describe 'UsageRecords API', type: :request do
             quantity: nil,
             reason: '在庫補充'
           }
-        }
+        }, headers: auth_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
@@ -97,7 +101,7 @@ RSpec.describe 'UsageRecords API', type: :request do
             quantity: -1,
             reason: '在庫補充'
           }
-        }
+        }, headers: auth_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
@@ -113,7 +117,7 @@ RSpec.describe 'UsageRecords API', type: :request do
             quantity: 5,
             reason: nil
           }
-        }
+        }, headers: auth_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)

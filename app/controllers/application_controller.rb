@@ -1,3 +1,12 @@
 class ApplicationController < ActionController::API
         include DeviseTokenAuth::Concerns::SetUserByToken
-end
+      
+        before_action :skip_session_storage
+      
+        private
+      
+        def skip_session_storage
+          request.session_options[:skip] = true
+        end
+      end
+      

@@ -1,8 +1,11 @@
+require 'faker'
+
 FactoryBot.define do
   factory :user do
     name { "テストユーザー" }
-    email { "test@example.com" }
-    encrypted_password { "password_hash" }
+    email { Faker::Internet.email }
+    password { "password" }
+    password_confirmation { "password" }
     role { "事務" }
   end
 end

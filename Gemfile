@@ -52,3 +52,4 @@ gem "rspec-rails", "~> 7.1", :group => :test
 gem 'devise'
 gem 'devise_token_auth'
 gem 'omniauth'
+gem 'faker'

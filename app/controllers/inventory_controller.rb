@@ -1,4 +1,7 @@
 class InventoryController < ApplicationController
+  before_action :authenticate_user!
+
+
   def index
     inventory = Item.select(:id, :name, :current_quantity, :optimal_quantity, :reorder_threshold)
     render json: inventory, status: :ok

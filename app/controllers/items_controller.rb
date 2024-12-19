@@ -1,4 +1,6 @@
 class ItemsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     items = Item.includes(:category).all
     render json: items.as_json(include: { category: { only: :name } })
