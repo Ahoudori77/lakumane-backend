@@ -12,7 +12,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :inventory, only: [:index, :update]
       resources :usage_records, only: [:create]
-      resources :notifications, only: [:index, :update]
+      resources :notifications, only: [:index, :update] do
+        collection do
+          get :unread_count
+          get :unread, to: 'notifications#unread'
+        end
+      end
     end
   end
 end

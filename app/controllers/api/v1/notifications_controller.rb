@@ -23,6 +23,19 @@ module Api
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Notification not found" }, status: :not_found
       end
+
+      # GET /api/v1/notifications/unread_count
+      def unread_count
+        unread_count = current_user.notifications.unread.count
+        render json: { unread_count: unread_count }, status: :ok
+      end
+      
+      # GET /api/v1/notifications/unread
+      def unread
+        unread_notifications = current_user.notifications.where(read: false)
+        render json: unread_notifications, status: :ok
+      end
+      
     end
   end
 end

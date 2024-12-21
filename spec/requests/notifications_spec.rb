@@ -21,7 +21,17 @@ RSpec.describe "Notifications API", type: :request do
       expect(response_data['unread_count']).to eq(5) # 未読通知の件数
     end
   end
-  
+
+  describe "GET /api/v1/notifications/unread" do
+    it "未読通知一覧を取得できる" do
+      Notification.delete_all # テスト前に通知を全削除
+      create_list(:notification, 5, user: user, read: false) # 必要な5件のみ生成
+      get '/api/v1/notifications/unread', headers: auth_headers
+      expect(response).to have_http_status(:ok)
+      response_data = JSON.parse(response.body)
+      expect(response_data.size).to eq(5) # 未読通知の件数と一致すること
+    end
+  end
  
   describe 'GET /api/v1/notifications?page=1' do
     it '通知をページネートして取得できる' do
