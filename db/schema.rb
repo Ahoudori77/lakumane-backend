@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_12_140819) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_20_105945) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "parent_id"
@@ -36,5 +36,68 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_12_140819) do
     t.index ["category_id"], name: "index_items_on_category_id"
   end
 
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "message"
+    t.bigint "user_id", null: false
+    t.bigint "item_id", null: false
+    t.boolean "read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_notifications_on_item_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.integer "quantity", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_orders_on_item_id"
+  end
+
+  create_table "usage_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "usage_date"
+    t.integer "quantity"
+    t.string "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_usage_records_on_item_id"
+    t.index ["user_id"], name: "index_usage_records_on_user_id"
+  end
+
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "encrypted_password"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "provider", default: "email", null: false
+    t.string "uid", default: "", null: false
+    t.json "tokens"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token"
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
   add_foreign_key "items", "categories"
+  add_foreign_key "notifications", "items"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "orders", "items"
+  add_foreign_key "usage_records", "items"
+  add_foreign_key "usage_records", "users"
 end
