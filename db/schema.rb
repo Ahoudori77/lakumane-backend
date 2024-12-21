@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_12_140819) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_15_041859) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "parent_id"
@@ -36,5 +36,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_12_140819) do
     t.index ["category_id"], name: "index_items_on_category_id"
   end
 
+  create_table "usage_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "usage_date"
+    t.integer "quantity"
+    t.string "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_usage_records_on_item_id"
+    t.index ["user_id"], name: "index_usage_records_on_user_id"
+  end
+
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "encrypted_password"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "items", "categories"
+  add_foreign_key "usage_records", "items"
+  add_foreign_key "usage_records", "users"
 end
