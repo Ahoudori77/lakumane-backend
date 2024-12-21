@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_19_093618) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_20_105945) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "parent_id"
@@ -34,6 +34,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_19_093618) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_items_on_category_id"
+  end
+
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "message"
+    t.bigint "user_id", null: false
+    t.bigint "item_id", null: false
+    t.boolean "read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_notifications_on_item_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -84,6 +95,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_19_093618) do
   end
 
   add_foreign_key "items", "categories"
+  add_foreign_key "notifications", "items"
+  add_foreign_key "notifications", "users"
   add_foreign_key "orders", "items"
   add_foreign_key "usage_records", "items"
   add_foreign_key "usage_records", "users"
