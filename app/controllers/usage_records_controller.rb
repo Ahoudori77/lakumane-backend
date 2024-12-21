@@ -1,4 +1,7 @@
 class UsageRecordsController < ApplicationController
+  before_action :authenticate_user!
+
+  
   def create
     usage_record = UsageRecord.new(usage_record_params)
     if usage_record.save
