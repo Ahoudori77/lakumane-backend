@@ -105,6 +105,18 @@ GEM
     irb (1.14.2)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     loofah (2.23.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -223,6 +235,7 @@ DEPENDENCIES
   devise_token_auth
   factory_bot_rails
   faker
+  kaminari
   mysql2 (~> 0.5)
   omniauth
   puma (~> 5.0)

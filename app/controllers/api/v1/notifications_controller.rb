@@ -5,8 +5,14 @@ module Api
 
       # GET /api/v1/notifications
       def index
-        notifications = current_user.notifications.where(read: false)
-        render json: notifications, status: :ok
+        all_unread_notifications = current_user.notifications.where(read: false)
+        paginated_notifications = all_unread_notifications.page(params[:page]).per(10)
+      
+        render json: {
+          notifications: paginated_notifications,
+          total_pages: paginated_notifications.total_pages,
+          unread_count: all_unread_notifications.size
+        }
       end
 
       # PATCH /api/v1/notifications/:id
