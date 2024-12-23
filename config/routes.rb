@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth'
+  mount ActionCable.server => '/cable'
   get 'items/index'
   get '/protected_endpoint', to: 'protected#show'
   resources :categories, only: [:index]
@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   resources :usage_records, only: [:create]
   resources :inventory, only: [:index, :update]
   resources :orders, only: [:index, :create]
-
+  
+  mount_devise_token_auth_for 'User', at: 'auth'
+  
   namespace :api do
     namespace :v1 do
       resources :inventory, only: [:index, :update]
