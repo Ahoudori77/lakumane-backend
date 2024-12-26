@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_20_105945) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_26_080440) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "parent_id"
@@ -53,6 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_20_105945) do
     t.string "status", default: "pending", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "supplier_info"
     t.index ["item_id"], name: "index_orders_on_item_id"
   end
 
