@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       resources :items, only: [:index, :show, :create, :update, :destroy]
       resources :inventory, only: [:index, :update, :show, :destroy]
       resources :usage_records, only: [:create]
-      resources :orders, only: [:index, :create, :show, :update, :destroy] do
+      resources :orders, only: [:index, :show, :create, :update, :destroy] do
        collection do
           get :export_csv  # CSVエクスポート用エンドポイント
         end
