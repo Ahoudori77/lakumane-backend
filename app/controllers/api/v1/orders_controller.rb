@@ -23,6 +23,16 @@ module Api
         end
       end
 
+      def create
+        @order = Order.new(order_params)
+      
+        if @order.save
+          render json: @order, status: :created
+        else
+          render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
+
       def destroy
         @order.destroy
         head :no_content  # 削除後は204 No Contentを返す

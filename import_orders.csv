@@ -1,0 +1,4 @@
+Item Name,Quantity,Status,Supplier Info
+ボールペン,10,pending,サプライヤーC
+ノート,5,approved,サプライヤーA
+シャープペン,15,completed,サプライヤーB

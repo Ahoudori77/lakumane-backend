@@ -23,8 +23,7 @@ Rails.application.routes.draw do
       end
       resources :notifications, only: [:index, :update] do
         collection do
-          get :unread_count
-          get :unread, to: 'notifications#unread'
+          get :unread
         end
       end
     end
