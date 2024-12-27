@@ -1,5 +1,5 @@
 class Notification < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :item
   
   scope :unread, -> { where(read: false) }
@@ -9,6 +9,7 @@ class Notification < ApplicationRecord
   private
 
   def broadcast_unread_count
+    return unless user
     NotificationsChannel.broadcast_to(user, {
       unread_count: user.notifications.unread.count
     })

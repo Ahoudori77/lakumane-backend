@@ -10,14 +10,25 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resources :items, only: [:index, :show, :create, :update, :destroy]
       resources :inventory, only: [:index, :update, :show, :destroy]
       resources :usage_records, only: [:create]
+      resources :orders, only: [:index, :show, :create, :update, :destroy] do
+       collection do
+          get :export_csv  # CSVエクスポート用エンドポイント
+        end
+        collection do
+          post :import_csv  # CSVインポート用エンドポイント
+        end
+      end
       resources :notifications, only: [:index, :update] do
         collection do
-          get :unread_count
-          get :unread, to: 'notifications#unread'
+          get :unread
         end
       end
     end
   end
+
+  # プリフライト用のルーティング
+  match '*path', to: 'application#preflight', via: [:options]
 end
