@@ -3,6 +3,11 @@ module Api
     class UsageRecordsController < ApplicationController
       before_action :authenticate_user!
 
+      def index
+        @usage_records = UsageRecord.all
+        render json: @usage_records
+      end
+
       def create
         item = Item.find(params[:item_id])
         quantity = params[:quantity].to_i

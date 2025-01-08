@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get '/protected_endpoint', to: 'protected#show'
   resources :categories, only: [:index]
   resources :items, only: [:index ,:show ,:create, :update, :destroy]
-  resources :usage_records, only: [:create]
+  resources :usage_records, only: [:index, :create]
   resources :inventory, only: [:index, :update]
   resources :orders, only: [:index, :create]
 
@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :items, only: [:index, :show, :create, :update, :destroy]
       resources :inventory, only: [:index, :update, :show, :destroy]
-      resources :usage_records, only: [:create]
+      resources :usage_records, only: [:index, :create]
       resources :orders, only: [:index, :show, :create, :update, :destroy] do
        collection do
           get :export_csv  # CSVエクスポート用エンドポイント
@@ -21,7 +21,7 @@ Rails.application.routes.draw do
           post :import_csv  # CSVインポート用エンドポイント
         end
       end
-      resources :notifications, only: [:index, :update] do
+      resources :notifications, only: [:index, :update, :create, :show] do
         collection do
           get :unread
         end
