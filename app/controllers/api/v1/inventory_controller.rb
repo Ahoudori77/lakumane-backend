@@ -10,7 +10,7 @@ module Api
 
       def update
         item = Item.find(params[:id])
-        quantity = params[:quantity]
+        quantity = inventory_params[:quantity]
 
         # バリデーション: quantityが数値であるか
         unless quantity.present? && quantity.to_s.match?(/\A-?\d+\z/)
@@ -28,14 +28,31 @@ module Api
         end
 
         # 在庫を更新
-        item.update!(current_quantity: new_quantity)
-
-        # reorder_thresholdを下回る場合の警告
-        warning = new_quantity < item.reorder_threshold ? "Inventory is below reorder threshold" : nil
-
-        render json: item.as_json.merge(warning: warning), status: :ok
+        if item.update(current_quantity: new_quantity)
+          # reorder_thresholdを下回る場合の警告
+          warning = new_quantity < item.reorder_threshold ? "Inventory is below reorder threshold" : nil
+          render json: item.as_json.merge(warning: warning), status: :ok
+        else
+          render json: { error: item.errors.full_messages }, status: :unprocessable_entity
+        end
       rescue ActiveRecord::RecordNotFound
         render json: { error: { message: 'Item not found' } }, status: :not_found
+      end
+
+      def show
+        item = Item.find_by(id: params[:id])
+        if item
+          render json: item
+        else
+          render json: { error: 'Item not found' }, status: :not_found
+        end
+      end
+
+      private
+
+      # strong parameters
+      def inventory_params
+        params.require(:inventory).permit(:quantity)
       end
     end
   end

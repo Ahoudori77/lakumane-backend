@@ -1,5 +1,5 @@
-class AddDescriptionToCategories < ActiveRecord::Migration[7.0]
+class AddCategoryToNotifications < ActiveRecord::Migration[6.1]
   def change
-    add_column :categories, :description, :string
+    add_column :notifications, :category, :string, null: false, default: "unclassified"
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_26_084626) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_05_073723) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "parent_id"
@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_26_084626) do
     t.boolean "read"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category", default: "unclassified", null: false
     t.index ["item_id"], name: "index_notifications_on_item_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
