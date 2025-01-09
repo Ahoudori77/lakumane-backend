@@ -7,7 +7,7 @@ module Api
       # アイテム一覧
       def index
         items = Item.all
-        render json: items
+        render json: items.as_json(only: [:id, :name, :unit_price, :current_quantity])
       end
 
       # アイテム詳細
