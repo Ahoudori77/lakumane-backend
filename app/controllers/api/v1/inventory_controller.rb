@@ -2,57 +2,50 @@ module Api
   module V1
     class InventoryController < ApplicationController
       before_action :authenticate_user!
+      rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
       def index
-        inventory_items = Item.all
-        render json: inventory_items
-      end
-
-      def update
-        item = Item.find(params[:id])
-        quantity = inventory_params[:quantity]
-
-        # バリデーション: quantityが数値であるか
-        unless quantity.present? && quantity.to_s.match?(/\A-?\d+\z/)
-          render json: { error: { message: 'Quantity must be a number' } }, status: :unprocessable_entity
-          return
-        end
-
-        quantity = quantity.to_i
-        new_quantity = item.current_quantity + quantity
-
-        # 在庫数が負になる場合のエラー
-        if new_quantity < 0
-          render json: { error: { message: 'Quantity cannot be negative' } }, status: :unprocessable_entity
-          return
-        end
-
-        # 在庫を更新
-        if item.update(current_quantity: new_quantity)
-          # reorder_thresholdを下回る場合の警告
-          warning = new_quantity < item.reorder_threshold ? "Inventory is below reorder threshold" : nil
-          render json: item.as_json.merge(warning: warning), status: :ok
-        else
-          render json: { error: item.errors.full_messages }, status: :unprocessable_entity
-        end
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: { message: 'Item not found' } }, status: :not_found
+        inventories = Inventory.includes(:item).page(params[:page]).per(params[:per_page])
+        render json: { data: inventories.as_json(include: :item) }, status: :ok
       end
 
       def show
-        item = Item.find_by(id: params[:id])
-        if item
-          render json: item
+        inventory = Inventory.find(params[:id])
+        render json: inventory.as_json(include: :item)
+      end
+      
+      def create
+        inventory = Inventory.new(inventory_params)
+        if inventory.save
+          render json: { data: inventory }, status: :created
         else
-          render json: { error: 'Item not found' }, status: :not_found
+          render json: { errors: inventory.errors.messages }, status: :unprocessable_entity
         end
+      end
+
+      def update
+        inventory = Inventory.find(params[:id])
+        if inventory.update(inventory_params)
+          render json: { data: inventory }, status: :ok
+        else
+          render json: { errors: inventory.errors.messages }, status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        inventory = Inventory.find(params[:id])
+        inventory.destroy
+        render json: { message: "Inventory deleted successfully" }, status: :ok
       end
 
       private
 
-      # strong parameters
       def inventory_params
-        params.require(:inventory).permit(:quantity)
+        params.require(:inventory).permit(:item_id, :current_quantity, :optimal_quantity, :reorder_threshold, :shelf_number, :unit, :unit_price)
+      end
+
+      def record_not_found
+        render json: { error: "Resource not found" }, status: :not_found
       end
     end
   end
