@@ -2,7 +2,7 @@ class Item < ApplicationRecord
   belongs_to :category
   has_many :orders
   has_many :notifications
-  has_one :inventory, dependent: :destroy
+  has_one :inventory
 
   validates :name, presence: true
   validates :description, presence: true
