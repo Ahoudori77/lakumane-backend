@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_09_101909) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_10_011539) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "parent_id"
@@ -18,6 +18,20 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_09_101909) do
     t.datetime "updated_at", null: false
     t.string "description"
     t.index ["parent_id"], name: "index_categories_on_parent_id"
+  end
+
+  create_table "inventories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.integer "current_quantity", default: 0, null: false
+    t.integer "optimal_quantity", default: 0, null: false
+    t.integer "reorder_threshold", default: 0, null: false
+    t.string "shelf_number", null: false
+    t.string "unit", null: false
+    t.decimal "unit_price", precision: 10, scale: 2
+    t.datetime "last_updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_inventories_on_item_id"
   end
 
   create_table "items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -98,6 +112,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_09_101909) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "inventories", "items"
   add_foreign_key "items", "categories"
   add_foreign_key "notifications", "items"
   add_foreign_key "notifications", "users"
