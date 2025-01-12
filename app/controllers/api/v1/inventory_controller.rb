@@ -5,9 +5,16 @@ module Api
       rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
       def index
-        inventories = Inventory.includes(:item).page(params[:page]).per(params[:per_page])
+        inventories = Inventory.joins(:item)
+        inventories = inventories.where(shelf_number: params[:shelf_number]) if params[:shelf_number].present?
+        inventories = inventories.where(item_attribute: params[:attribute]) if params[:attribute].present?
+        inventories = inventories.joins(:item).where("items.name LIKE ?", "%#{params[:item_name]}%") if params[:item_name].present?
+        inventories = inventories.joins(:item).where("items.manufacturer LIKE ?", "%#{params[:manufacturer]}%") if params[:manufacturer].present?
+      
+        inventories = inventories.page(params[:page]).per(params[:per_page])
         render json: { data: inventories.as_json(include: :item) }, status: :ok
       end
+      
 
       def show
         inventory = Inventory.find(params[:id])
