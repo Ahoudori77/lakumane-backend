@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth'
   get 'items/index'
   get '/protected_endpoint', to: 'protected#show'
   resources :categories, only: [:index]
@@ -10,7 +9,9 @@ Rails.application.routes.draw do
   
   namespace :api do
     namespace :v1 do
-      mount_devise_token_auth_for 'User', at: 'auth'
+      mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+        registrations: 'custom/registrations'
+      }
       resources :items, only: [:index, :show, :create, :update, :destroy]
       resources :inventory, only: [:index, :show, :create, :update, :destroy]
       resources :usage_records, only: [:index, :create]

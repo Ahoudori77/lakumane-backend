@@ -2,7 +2,7 @@ class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   
   before_action :skip_session_storage
-  before_action :configure_permitted_parameters, if: :devise_controller_with_devise?
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
 
@@ -11,9 +11,8 @@ class ApplicationController < ActionController::API
   end
 
   def configure_permitted_parameters
-    if respond_to?(:devise_parameter_sanitizer)
-      devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
-    end
+    Rails.logger.debug "DeviseTokenAuth: 許可されるパラメータの設定を適用"
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
   end
 
   # Deviseのコントローラーでのみフィルターを実行する
